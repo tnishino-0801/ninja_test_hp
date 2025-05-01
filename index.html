@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NINJA loader - ニンジャ印のハイクオリティローダー</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: auto;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            position: relative;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .background-image.desktop {
+            width: 100vw;
+            height: 150vw;
+            display: block;
+        }
+
+        .background-image.mobile {
+            width: 100vw;
+            height: 272vw;
+            display: block;
+        }
+        
+        .section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            font-size: 2.4rem;
+            position: relative;
+        }
+        
+        .content {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            background-image: url('/img/背景.png');
+            background-repeat: repeat-y;
+            background-size: 100% auto;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                background-image: url('/img/背景_スマホ.png');
+            }
+        }
+
+        
+        @media (max-width: 768px) {
+            .background-container .background-image.desktop {
+                display: none;
+            }
+            
+            .content {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .background-container .background-image.mobile {
+                display: none;
+            }
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .hero-main {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            width: calc(100vw - 60px);
+            height: auto;
+        }
+        
+        .hero-mobile {
+            display: none;
+        }
+        
+        .features-title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px auto 30px;
+            width: 100%; /* Changed to 100% for responsiveness */
+            max-width: 50rem; /* Maximum width on larger screens */
+            position: relative;
+            padding: 0 15px; /* Added padding for smaller screens */
+        }
+        
+        .shuriken-img {
+            width: 180px;
+            height: auto;
+            position: absolute;
+        }
+        
+        .shuriken-img-left {
+            right: 38rem;
+            z-index: 10;
+        }
+        
+        .shuriken-img-right {
+            left: 38rem;
+            z-index: 10;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .feature {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            position: relative;
+        }
+        
+        .features-title {
+            background-color: #ff3e81;
+            color: white;
+            padding: 2rem 8rem;
+            border-radius: 50px;
+            font-size: 29px;
+            font-weight: bold;
+            line-height: 1rem;
+            display: inline-block;
+            width: auto; /* Changed to auto */
+            max-width: 100%; /* Maximum width to prevent overflow */
+            position: relative;
+            margin: 0 15px;
+            white-space: nowrap; /* Prevents text from wrapping */
+            overflow: hidden; /* Hides overflow text */
+            text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+        }
+        
+        .feature-title {
+            color: #ff3e81;
+            font-size: 1.4rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .feature-content {
+            color: #333;
+            font-size: 1.3rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .line {
+            flex-grow: 1;
+            height: 2px;
+            background-color: black;
+            border: none;
+        }
+
+        .diamond-left {
+            font-size: 1.2rem;
+            margin: 0 0;
+            padding-top: 0.2rem;
+            transform: rotate(0deg);
+            position: absolute;
+            left: -0.6rem;
+        }
+
+        .diamond-right {
+            font-size: 1.2rem;
+            margin: 0 0;
+            padding-top: 0.2rem;
+            transform: rotate(0deg);
+            position: absolute;
+            left: Calc(100% - 0.6rem);
+        }
+
+        /* Updated CTA button styles for better responsiveness */
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: block;
+            /* 340 */
+            width: 340px;
+            height: 105px;
+            position: relative;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+            border-radius: 40px;
+            overflow: hidden; /* Add this to prevent content from spilling outside */
+        }
+
+        .cta-button:hover {
+            opacity: 0.7;
+        }
+
+        .cta-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* This ensures the image covers the entire button area */
+            border-radius: 40px;
+        }
+
+        .cta-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .cta-icon {
+            height: 64px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .cta-arrow {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .cta-text {
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* Improved responsive styles for buttons */
+        @media (max-width: 768px) {
+            .cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 90%;
+                max-width: 280px;
+                height: 86px; /* Adjust height for mobile */
+                margin-bottom: 15px;
+            }
+            
+            .cta-icon {
+                height: 48px; /* Smaller icon for mobile */
+            }
+            
+            .cta-text {
+                font-size: 18px; /* Smaller text for mobile */
+            }
+            
+            .cta-arrow {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* For even smaller screens */
+        @media (max-width: 480px) {
+            .cta-button {
+                height: 90px; /* Further reduce height for very small screens */
+                max-width: 250px;
+            }
+            
+            .cta-icon {
+                height: 40px; /* Even smaller icon */
+            }
+            
+            .cta-text {
+                font-size: 19px; /* Even smaller text */
+            }
+            
+            .cta-arrow {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        /* Responsive features styling */
+        .responsive-features-content {
+            display: none !important;
+            background-color: #ff3e81;
+            width: 96%;
+            margin: 20px auto;
+            padding: 3%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .responsive-title {
+            background-color: #ff3e81;
+            color: white;
+            font-size: 29px;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .responsive-content {
+            background-color: white;
+            padding: 15px;
+        }
+
+        .responsive-item {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .responsive-badge {
+            background-color: #000;
+            color: #fff;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            .features-title-wrapper, .features {
+                display: none; /* Hide the original features section on mobile */
+            }
+            
+            .responsive-features-content {
+                display: block !important; /* Show the responsive features on mobile */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .shuriken-img-left {
+                right: -12px;
+                z-index: 10;
+            }
+            
+            .shuriken-img-right {
+                left: -12px;
+                z-index: 10;
+            }
+        }
+
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 70vh;
+                padding: 1rem;
+            }
+            
+            .hero-desktop {
+                display: none;
+            }
+            
+            .hero-mobile {
+                display: block;
+            }
+            
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 90%;
+                max-width: 280px;
+                margin-bottom: 15px;
+            }
+            
+            .cta-text {
+                font-size: 18px;
+            }
+            
+            .features-title {
+                font-size: 18px;
+                width:80%;
+                margin: 0 5px;
+                padding: 2rem 0;
+            }
+            
+            .shuriken-img {
+                width: 80px;
+                position: absolute;
+            }
+
+            .shuriken-img-left {
+                right: 81%;
+                z-index: 10;
+            }
+            
+            .shuriken-img-right {
+                left: 81%;
+                z-index: 10;
+            }
+        }
+
+        /* info セクション */
+        .ninja-info-section {
+            position: relative;
+            padding: 4rem 1rem 2rem;
+            max-width: 1080px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .scroll-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 2rem 1.5rem 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: visible;
+        }
+
+        .ninja-title-container {
+            position: relative;
+            margin-bottom: 3rem;
+
+            overflow: visible;
+
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+        }
+
+        .scroll-bg {
+            position: absolute;
+            max-width: 900px;
+            top: -108px;
+            width: 95%;
+            height: auto;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            margin-right: 5%;
+        }
+
+        .loader-overlay {
+            position: absolute;
+            left: 100%;
+            transform: translate(-90%, -33%);
+            width: 20%;
+        }
+
+        .ninja-title {
+            position: absolute;
+            top: -40px;
+            color: #000;
+            font-size: 2.75rem;
+            font-weight: bold;
+            margin: 0;
+            margin-right: 5%;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        @media (max-width: 1080px) {
+            .ninja-title {
+                top: calc(-94px + 5vw);
+            }
+        }
+
+        /* レスポンシブデザイン - 段階的な調整 */
+        @media (max-width: 900px) {
+            .ninja-title-container {
+                margin-bottom: 2.5rem;
+            }
+            
+            .scroll-bg {
+                top: -12vw;
+            }
+            
+            .ninja-title {
+                font-size: calc(1.8rem + 1vw);
+                top: calc(-62px + 2vw);
+            }
+        }
+
+        .ninja-subtitle-container {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        .ninja-subtitle {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .ninja-description {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            padding: 0 1rem;
+        }
+
+        .ninja-description p {
+            margin: 0.7rem 0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .ninja-profile-box {
+            background-color: #ffdd00;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .profile-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0;
+            padding: 0 0.5rem;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .profile-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .profile-text {
+            flex: 3;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .company-info {
+            font-size: 0.9rem;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .profile-image-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .highlight-bottom {
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-bottom::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 50%;  /* This controls how much of the text is highlighted from bottom */
+            width: 100%;
+            background-color: #ffff00;  /* Bright yellow like in your image */
+            z-index: -1;
+        }
+    
+        .ninja-pink {
+            color: #ff3e81;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .ninja-info-section {
+                padding: 3rem 0.8rem 1.5rem;
+            }
+            
+            .scroll-container {
+                padding: 1.8rem 1rem 1.2rem;
+                overflow: visible;
+            }
+            
+            .ninja-title-container {
+                height: 60px;
+                margin-bottom: 2rem;
+                overflow: visible;
+            }
+            
+            .ninja-title {
+                font-size: 1.5rem;
+                top: -30px;
+            }
+            
+            .ninja-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .ninja-description p {
+                font-size: 1.1rem;
+                margin: 0.5rem 0;
+            }
+            
+            .profile-content {
+                flex-direction: column;
+            }
+            
+            .profile-text {
+                order: 2;
+            }
+            
+            .profile-image-container {
+                margin: 0 auto 1.5rem;
+                order: 1;
+                max-width: 180px;
+            }
+            
+            .company-info {
+                text-align: center;
+            }
+            
+            .profile-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ninja-info-section {
+                padding: 2.5rem 0.5rem 1rem;
+            }
+            
+            .scroll-container {
+                padding: 1.5rem 0.8rem 1rem;
+                border-radius: 10px;
+            }
+            
+            .ninja-title-container {
+                height: 50px;
+                margin-bottom: 1.5rem;
+            }
+            
+            .ninja-title {
+                font-size: 1.2rem;
+                top: -24px;
+            }
+            
+            .ninja-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .ninja-subtitle-container {
+                margin-bottom: 1.5rem;
+                padding: 0;
+            }
+            
+            .ninja-description {
+                padding: 0;
+                margin-bottom: 1.5rem;
+            }
+            
+            .ninja-description p {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+            
+            .profile-header {
+                margin-bottom: 1rem;
+            }
+            
+            .profile-text {
+                font-size: 0.9rem;
+            }
+            
+            .company-info {
+                font-size: 0.8rem;
+            }
+            
+            .shuriken-mark {
+                font-size: 14px;
+            }
+            
+            .profile-image-container {
+                max-width: 150px;
+                margin-bottom: 1rem;
+            }
+            
+            .ninja-profile-box {
+                padding: 1.2rem 0.8rem;
+                margin-top: 1.5rem;
+            }
+        }
+
+        /* オレンジバナー */
+        .orange-banner-outer {
+            position: fixed;
+            z-index: 1000;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            padding: 0.5rem;
+            width: 90%; /* Use percentage instead of max-width */
+            max-width: 1080px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .orange-banner {
+            background-color: #FF9800;
+            z-index: 1001;
+            border-radius: 15px;
+            padding: 1.5rem 0.5rem;
+            width: 100%; /* This ensures it takes full width of parent */
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .banner-text {
+            flex: 2;
+            text-align: left;
+            padding: 0 1rem;
+            padding-right: 0.2rem;
+        }
+
+        .banner-text p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .banner-buttons {
+            flex: 3;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            gap: 0.2rem;
+        }
+
+        .banner-button {
+            display: inline-block;
+            color: white;
+            padding: 0.8rem 0.3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .pink-button {
+            background-color: #FF1493;
+            width: 44%;
+        }
+
+        .blue-button {
+            background-color: #00BFFF;
+            width: 49%;
+        }
+
+        .pink-button:hover {
+            opacity: 0.7;
+        }
+
+        .blue-button:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .orange-banner {
+                flex-direction: column;
+            }
+            
+            .banner-text p {
+                font-size: 1.2rem;
+            }
+            
+            .banner-buttons a {
+                font-size: 1rem;
+            }
+
+            .banner-text {
+                flex: none;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            
+            .banner-buttons {
+                flex: none;
+                width: 100%;
+                align-items: center;
+            }
+            
+            .banner-button {
+                margin-bottom: 0;
+            }
+            .pink-button {
+                width: 44%;
+            }
+
+            .blue-button
+            {
+                width: 54%;
+            }
+        }
+
+        /* Responsive CSS */
+        .responsive-wordbreak{
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .responsive-wordbreak{
+                display: block;
+            }
+        }
+
+        /* Additional media queries for better responsiveness */
+        @media (max-width: 768px) {
+            .orange-banner-outer {
+                width: 95%; /* Slightly wider on smaller screens */
+                padding: 0.3rem;
+            }
+            
+            .orange-banner {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .orange-banner-outer {
+                width: 98%; /* Almost full width on very small screens */
+                padding: 0.2rem;
+            }
+            
+            .orange-banner {
+                padding: 0.8rem;
+            }
+        }
+
+        footer {
+            padding-bottom: 10rem !important;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding-bottom: 12rem !important;
+            }
+        }
+
+    </style>
+<style class="responsive_word_break">
+            .text-block {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+                line-height: 1.6;
+                margin-bottom: 1em;
+            }
+            .responsive-paragraph {
+                display: block;
+                width: 100%;
+            }
+            .break-word {
+                word-break: break-all;
+            }
+            .word-wrapper {
+                display: inline-block;
+            }
+            @media (max-width: 767px) {
+                .text-block { font-size: 16px; }
+            }
+            @media (min-width: 768px) and (max-width: 1023px) {
+                .text-block { font-size: 18px; }
+            }
+            @media (min-width: 1024px) {
+                .text-block { font-size: 20px; }
+            }
+        </style></head>
+<body>
+<!-- コンテンツセクション -->
+<div class="content">
+<section class="hero">
+<div class="hero-content">
+<!-- メインビジュアル -->
+<img alt="NINJA loader - ニンジャ印のハイクオリティローダー" class="hero-main hero-desktop" src="img/ヒーローセクション.png"/>
+<img alt="NINJA loader - ニンジャ印のハイクオリティローダー" class="hero-main hero-mobile" src="img/ヒーローセクション_スマホ.png"/>
+<!-- 特徴セクション -->
+<div class="features-title-wrapper">
+<img alt="手裏剣" class="shuriken-img shuriken-img-left" src="img/手裏剣_三連.png"/>
+<div class="features-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">NINJA </span><span class="word-wrapper" style="white-space: pre-wrap;">loaderのここがすごい！</span></span></div>
+<img alt="手裏剣" class="shuriken-img shuriken-img-right" src="img/手裏剣_三連.png"/>
+</div>
+<div class="features">
+<div class="feature">
+<div class="feature-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ここが</span><span class="word-wrapper" style="white-space: pre-wrap;">すごい！</span></span></div>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+<div class="feature-content"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">一</span><span class="word-wrapper" style="white-space: pre-wrap;">枚</span><span class="word-wrapper" style="white-space: pre-wrap;">たったの</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">19円</span></span></div>
+</div>
+<div class="feature">
+<div class="feature-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ここが</span><span class="word-wrapper" style="white-space: pre-wrap;">すごい！</span></span></div>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+<div class="feature-content"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">回の</span><span class="word-wrapper" style="white-space: pre-wrap;">検品で</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ハイ</span><span class="word-wrapper" style="white-space: pre-wrap;">クオリティ</span></span></div>
+</div>
+<div class="feature">
+<div class="feature-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ここが</span><span class="word-wrapper" style="white-space: pre-wrap;">すごい！</span></span></div>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+<div class="feature-content"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">最短</span><span class="word-wrapper" style="white-space: pre-wrap;">当日で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">届け</span></span><br/><span style="background-color: #000; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 0.9rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">都内</span><span class="word-wrapper" style="white-space: pre-wrap;">近郊</span></span></span></div>
+</div>
+</div>
+<!-- Mobile 向け特徴セクション -->
+<div class="responsive-features-content" style="display: none;">
+<div class="responsive-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">NINJA </span><span class="word-wrapper" style="white-space: pre-wrap;">loaderの</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ここが</span><span class="word-wrapper" style="white-space: pre-wrap;">すごい！</span></span></div>
+<div class="responsive-content">
+<div class="responsive-item"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">一</span><span class="word-wrapper" style="white-space: pre-wrap;">枚</span><span class="word-wrapper" style="white-space: pre-wrap;">たったの</span><span class="word-wrapper" style="white-space: pre-wrap;">19</span><span class="word-wrapper" style="white-space: pre-wrap;">円</span></span></div>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+<div class="responsive-item"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">回の</span><span class="word-wrapper" style="white-space: pre-wrap;">検品で</span><span class="word-wrapper" style="white-space: pre-wrap;">ハイ</span><span class="word-wrapper" style="white-space: pre-wrap;">クオリティ</span></span></div>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+<div class="responsive-item"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">最短</span><span class="word-wrapper" style="white-space: pre-wrap;">当日で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">届け</span></span><span class="responsive-badge"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">都内</span><span class="word-wrapper" style="white-space: pre-wrap;">近郊</span></span></span></div>
+</div>
+</div>
+<!-- CTA -->
+<div class="cta-container">
+<a class="cta-button" href="#order">
+<img alt="ピンクボタン背景" class="cta-bg" src="img/ボタン_白枠ピンク.png"/>
+<div class="cta-content">
+<img alt="注文忍者" class="cta-icon" src="img/ニンジャ_ダッシュ.png"/>
+<span class="cta-text"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">今</span><span class="word-wrapper" style="white-space: pre-wrap;">すぐ</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">する</span></span></span>
+<img alt="&gt;" src="img/矢印.png" style="width: 12px; height: 12px; flex-shrink: 0;"/>
+</div>
+</a>
+<a class="cta-button" href="#contact">
+<img alt="ブルーボタン背景" class="cta-bg" src="img/ボタン_白枠シアン.png"/>
+<div class="cta-content">
+<img alt="電話忍者" class="cta-icon" src="img/ニンジャ_電話.png"/>
+<span class="cta-text"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">電話で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">問い合わせ</span></span></span>
+<img alt="&gt;" src="img/矢印.png" style="width: 12px; height: 12px; flex-shrink: 0;"/>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- ニンジャローダー紹介セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_ダークマジェンタ.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">常識を</span><span class="word-wrapper" style="white-space: pre-wrap;">変える</span><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- サブ見出し -->
+<div class="ninja-subtitle-container">
+<h3 class="ninja-subtitle"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">「</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー」の</span><span class="word-wrapper" style="white-space: pre-wrap;">常識を</span><span class="word-wrapper" style="white-space: pre-wrap;">覆す</span></span></h3>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+</div>
+<!-- 紹介文 -->
+<div class="ninja-description">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">おがわ</span><span class="word-wrapper" style="white-space: pre-wrap;">監督の</span><span class="word-wrapper" style="white-space: pre-wrap;">元に</span><span class="word-wrapper" style="white-space: pre-wrap;">届いた</span></span><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">粗悪な</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーに</span><span class="word-wrapper" style="white-space: pre-wrap;">大</span><span class="word-wrapper" style="white-space: pre-wrap;">激怒！</span></span></span></p>
+<p><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">製造</span><span class="word-wrapper" style="white-space: pre-wrap;">工場に</span><span class="word-wrapper" style="white-space: pre-wrap;">乗り込みを</span><span class="word-wrapper" style="white-space: pre-wrap;">かけ</span></span></span><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">、</span><span class="word-wrapper" style="white-space: pre-wrap;">改革の</span><span class="word-wrapper" style="white-space: pre-wrap;">嵐を</span><span class="word-wrapper" style="white-space: pre-wrap;">巻き起こした――</span></span></p>
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">妥協</span><span class="word-wrapper" style="white-space: pre-wrap;">なき</span><span class="word-wrapper" style="white-space: pre-wrap;">闘いから</span><span class="word-wrapper" style="white-space: pre-wrap;">生まれた、</span></span><span class="ninja-pink"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span></span></span></p>
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">すべてを</span><span class="word-wrapper" style="white-space: pre-wrap;">ゼロから</span><span class="word-wrapper" style="white-space: pre-wrap;">創り上げた、</span><span class="word-wrapper" style="white-space: pre-wrap;">まさに</span></span><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">伝説の</span><span class="word-wrapper" style="white-space: pre-wrap;">一</span><span class="word-wrapper" style="white-space: pre-wrap;">品</span></span></span><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">です</span></span></p>
+</div>
+<!-- おがわ監督紹介 -->
+<div class="ninja-profile-box">
+<div class="profile-header">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<h4 class="profile-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">そもそも「</span><span class="word-wrapper" style="white-space: pre-wrap;">おがわ</span><span class="word-wrapper" style="white-space: pre-wrap;">監督」って？</span></span></h4>
+</div>
+<div class="profile-content">
+<div class="profile-text">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">「</span><span class="word-wrapper" style="white-space: pre-wrap;">ポケカ</span><span class="word-wrapper" style="white-space: pre-wrap;">専門</span><span class="word-wrapper" style="white-space: pre-wrap;">ショップニンニン」</span><span class="word-wrapper" style="white-space: pre-wrap;">代表。</span><span class="word-wrapper" style="white-space: pre-wrap;">複数の</span><span class="word-wrapper" style="white-space: pre-wrap;">ショップ</span><span class="word-wrapper" style="white-space: pre-wrap;">立ち上げや</span><span class="word-wrapper" style="white-space: pre-wrap;">商品</span><span class="word-wrapper" style="white-space: pre-wrap;">開発を</span><span class="word-wrapper" style="white-space: pre-wrap;">手がけて</span><span class="word-wrapper" style="white-space: pre-wrap;">きた。</span><span class="word-wrapper" style="white-space: pre-wrap;">長らく</span><span class="word-wrapper" style="white-space: pre-wrap;">業界に</span><span class="word-wrapper" style="white-space: pre-wrap;">携わる</span><span class="word-wrapper" style="white-space: pre-wrap;">中で</span><span class="word-wrapper" style="white-space: pre-wrap;">上げ、「</span><span class="word-wrapper" style="white-space: pre-wrap;">本当に</span><span class="word-wrapper" style="white-space: pre-wrap;">使い</span><span class="word-wrapper" style="white-space: pre-wrap;">やすい</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーを</span><span class="word-wrapper" style="white-space: pre-wrap;">届けたい」と</span><span class="word-wrapper" style="white-space: pre-wrap;">いう</span><span class="word-wrapper" style="white-space: pre-wrap;">信念の</span><span class="word-wrapper" style="white-space: pre-wrap;">もと、</span><span class="word-wrapper" style="white-space: pre-wrap;">ユーザーの</span><span class="word-wrapper" style="white-space: pre-wrap;">声を</span><span class="word-wrapper" style="white-space: pre-wrap;">集め、</span><span class="word-wrapper" style="white-space: pre-wrap;">開発から</span><span class="word-wrapper" style="white-space: pre-wrap;">検品まで</span><span class="word-wrapper" style="white-space: pre-wrap;">全</span><span class="word-wrapper" style="white-space: pre-wrap;">工程を</span><span class="word-wrapper" style="white-space: pre-wrap;">自ら</span><span class="word-wrapper" style="white-space: pre-wrap;">監督。</span><span class="word-wrapper" style="white-space: pre-wrap;">そんな</span><span class="word-wrapper" style="white-space: pre-wrap;">おがわ</span><span class="word-wrapper" style="white-space: pre-wrap;">監督だからこそ</span><span class="word-wrapper" style="white-space: pre-wrap;">生まれた、</span><span class="word-wrapper" style="white-space: pre-wrap;">究極の</span><span class="word-wrapper" style="white-space: pre-wrap;">サイド</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーです。</span></span></p>
+<p class="company-info"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">株式</span><span class="word-wrapper" style="white-space: pre-wrap;">会社</span><span class="word-wrapper" style="white-space: pre-wrap;">NINJA</span><span class="word-wrapper" style="white-space: pre-wrap;">代表</span><span class="word-wrapper" style="white-space: pre-wrap;">取締</span><span class="word-wrapper" style="white-space: pre-wrap;">役/</span><span class="word-wrapper" style="white-space: pre-wrap;">ゼロ</span><span class="word-wrapper" style="white-space: pre-wrap;">フィルム</span><span class="word-wrapper" style="white-space: pre-wrap;">代表</span><span class="word-wrapper" style="white-space: pre-wrap;">小</span><span class="word-wrapper" style="white-space: pre-wrap;">川北</span><span class="word-wrapper" style="white-space: pre-wrap;">人</span></span></p>
+</div>
+<div class="profile-image-container">
+<img alt="おがわ監督" class="profile-image" src="img/おがわ監督.png"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ニンジャローダーの強み紹介セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_ブルー.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">つの</span><span class="word-wrapper" style="white-space: pre-wrap;">強み</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- サブ見出し -->
+<div class="ninja-subtitle-container">
+<h3 class="ninja-subtitle"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">おがわ</span><span class="word-wrapper" style="white-space: pre-wrap;">監督が</span><span class="word-wrapper" style="white-space: pre-wrap;">トレカ</span><span class="word-wrapper" style="white-space: pre-wrap;">愛から</span><span class="word-wrapper" style="white-space: pre-wrap;">生み出した</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">冠</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー！</span></span></h3>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+</div>
+<!-- 3つの特徴紹介 -->
+<div class="features" style="margin-bottom: 2rem;">
+<div class="feature" style="background-color: #f5f5f5;">
+<div style="text-align: center; position: relative; padding-top: 2rem;">
+<img alt="王冠" src="img/王冠.png" style="width: 40px; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);"/>
+<span style="font-size: 1.4rem; font-weight: bold;"><span class="highlight-bottom"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">圧倒</span><span class="word-wrapper" style="white-space: pre-wrap;">的な</span><span class="word-wrapper" style="white-space: pre-wrap;">品質</span></span></span></span>
+</div>
+<div class="feature-content" style="color: #333; padding: 1rem; text-align: left; font-weight: normal;">
+<p style="color: #ff7e00; font-weight: bold; text-align: center; margin-bottom: 0.8rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">他社の</span><span class="word-wrapper" style="white-space: pre-wrap;">2</span><span class="word-wrapper" style="white-space: pre-wrap;">倍の</span><span class="word-wrapper" style="white-space: pre-wrap;">検品</span><span class="word-wrapper" style="white-space: pre-wrap;">精度</span></span></p>
+<p><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">回の</span><span class="word-wrapper" style="white-space: pre-wrap;">厳格な</span><span class="word-wrapper" style="white-space: pre-wrap;">検品</span></span></span><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">で</span><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品を</span><span class="word-wrapper" style="white-space: pre-wrap;">徹底</span><span class="word-wrapper" style="white-space: pre-wrap;">排除！</span><span class="word-wrapper" style="white-space: pre-wrap;">角の</span><span class="word-wrapper" style="white-space: pre-wrap;">処理まで</span><span class="word-wrapper" style="white-space: pre-wrap;">完璧に</span><span class="word-wrapper" style="white-space: pre-wrap;">仕上げ、</span><span class="word-wrapper" style="white-space: pre-wrap;">大切な</span><span class="word-wrapper" style="white-space: pre-wrap;">カードを</span><span class="word-wrapper" style="white-space: pre-wrap;">傷から</span><span class="word-wrapper" style="white-space: pre-wrap;">守ります。</span><span class="word-wrapper" style="white-space: pre-wrap;">高</span><span class="word-wrapper" style="white-space: pre-wrap;">透明</span><span class="word-wrapper" style="white-space: pre-wrap;">度の</span><span class="word-wrapper" style="white-space: pre-wrap;">素材で、</span><span class="word-wrapper" style="white-space: pre-wrap;">レア</span><span class="word-wrapper" style="white-space: pre-wrap;">カードの</span><span class="word-wrapper" style="white-space: pre-wrap;">美し</span><span class="word-wrapper" style="white-space: pre-wrap;">さを</span><span class="word-wrapper" style="white-space: pre-wrap;">その</span><span class="word-wrapper" style="white-space: pre-wrap;">まま</span><span class="word-wrapper" style="white-space: pre-wrap;">鑑賞</span><span class="word-wrapper" style="white-space: pre-wrap;">できます。</span></span></p>
+</div>
+</div>
+<div class="feature" style="background-color: #f5f5f5;">
+<div style="text-align: center; position: relative; padding-top: 2rem;">
+<img alt="王冠" src="img/王冠.png" style="width: 40px; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);"/>
+<span style="font-size: 1.4rem; font-weight: bold;"><span class="highlight-bottom"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">業界</span><span class="word-wrapper" style="white-space: pre-wrap;">破壊の</span><span class="word-wrapper" style="white-space: pre-wrap;">価格</span></span></span></span>
+</div>
+<div class="feature-content" style="color: #333; padding: 1rem; text-align: left; font-weight: normal;">
+<p style="color: #ff7e00; font-weight: bold; text-align: center; margin-bottom: 0.8rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">競合</span><span class="word-wrapper" style="white-space: pre-wrap;">比</span><span class="word-wrapper" style="white-space: pre-wrap;">最大</span><span class="word-wrapper" style="white-space: pre-wrap;">40%</span><span class="word-wrapper" style="white-space: pre-wrap;">オフ</span></span></p>
+<p><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">中間</span><span class="word-wrapper" style="white-space: pre-wrap;">業</span><span class="word-wrapper" style="white-space: pre-wrap;">者</span><span class="word-wrapper" style="white-space: pre-wrap;">カット</span></span></span><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">で</span><span class="word-wrapper" style="white-space: pre-wrap;">業界の</span><span class="word-wrapper" style="white-space: pre-wrap;">低</span><span class="word-wrapper" style="white-space: pre-wrap;">価格を</span><span class="word-wrapper" style="white-space: pre-wrap;">実現！</span><span class="word-wrapper" style="white-space: pre-wrap;">高</span><span class="word-wrapper" style="white-space: pre-wrap;">品質なのに</span><span class="word-wrapper" style="white-space: pre-wrap;">1</span><span class="word-wrapper" style="white-space: pre-wrap;">枚</span><span class="word-wrapper" style="white-space: pre-wrap;">あたり</span><span class="word-wrapper" style="white-space: pre-wrap;">たったの</span><span class="word-wrapper" style="white-space: pre-wrap;">19</span><span class="word-wrapper" style="white-space: pre-wrap;">円から。</span><span class="word-wrapper" style="white-space: pre-wrap;">儲が</span><span class="word-wrapper" style="white-space: pre-wrap;">増えるほど</span><span class="word-wrapper" style="white-space: pre-wrap;">さらに</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">得に</span><span class="word-wrapper" style="white-space: pre-wrap;">なる、</span><span class="word-wrapper" style="white-space: pre-wrap;">ショップ</span><span class="word-wrapper" style="white-space: pre-wrap;">様に</span><span class="word-wrapper" style="white-space: pre-wrap;">優しい</span><span class="word-wrapper" style="white-space: pre-wrap;">価格</span><span class="word-wrapper" style="white-space: pre-wrap;">設定です。</span></span></p>
+</div>
+</div>
+<div class="feature" style="background-color: #f5f5f5;">
+<div style="text-align: center; position: relative; padding-top: 2rem;">
+<img alt="王冠" src="img/王冠.png" style="width: 40px; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);"/>
+<span style="font-size: 1.4rem; font-weight: bold;"><span class="highlight-bottom"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">圧倒</span><span class="word-wrapper" style="white-space: pre-wrap;">的な</span><span class="word-wrapper" style="white-space: pre-wrap;">即応</span><span class="word-wrapper" style="white-space: pre-wrap;">性</span></span></span></span>
+</div>
+<div class="feature-content" style="color: #333; padding: 1rem; text-align: left; font-weight: normal;">
+<p style="color: #ff7e00; font-weight: bold; text-align: center; margin-bottom: 0.8rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">業界</span><span class="word-wrapper" style="white-space: pre-wrap;">最速の</span><span class="word-wrapper" style="white-space: pre-wrap;">対応</span><span class="word-wrapper" style="white-space: pre-wrap;">スピード</span></span></p>
+<p><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">生産から</span><span class="word-wrapper" style="white-space: pre-wrap;">配送まで</span><span class="word-wrapper" style="white-space: pre-wrap;">完全</span><span class="word-wrapper" style="white-space: pre-wrap;">ワン</span><span class="word-wrapper" style="white-space: pre-wrap;">ストップ！</span></span></span><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">都内</span><span class="word-wrapper" style="white-space: pre-wrap;">近郊なら</span><span class="word-wrapper" style="white-space: pre-wrap;">最短</span><span class="word-wrapper" style="white-space: pre-wrap;">当日</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">届け</span><span class="word-wrapper" style="white-space: pre-wrap;">可能。</span><span class="word-wrapper" style="white-space: pre-wrap;">急な</span><span class="word-wrapper" style="white-space: pre-wrap;">大量</span><span class="word-wrapper" style="white-space: pre-wrap;">注文にも</span><span class="word-wrapper" style="white-space: pre-wrap;">柔軟に</span><span class="word-wrapper" style="white-space: pre-wrap;">対応で、</span><span class="word-wrapper" style="white-space: pre-wrap;">イベント</span><span class="word-wrapper" style="white-space: pre-wrap;">前の</span><span class="word-wrapper" style="white-space: pre-wrap;">突発</span><span class="word-wrapper" style="white-space: pre-wrap;">需要も</span><span class="word-wrapper" style="white-space: pre-wrap;">解決</span><span class="word-wrapper" style="white-space: pre-wrap;">します。</span></span></p>
+</div>
+</div>
+</div>
+<!-- 締めの紹介文 -->
+<div class="ninja-description" style="background-color: #f9f9f9; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+<p style="font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1.5rem; ">
+<span class="highlight-bottom"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">つの</span><span class="word-wrapper" style="white-space: pre-wrap;">強みが</span><span class="word-wrapper" style="white-space: pre-wrap;">生み出す</span><span class="word-wrapper" style="white-space: pre-wrap;">最高の</span><span class="word-wrapper" style="white-space: pre-wrap;">トレカ</span><span class="word-wrapper" style="white-space: pre-wrap;">体験</span></span></span>
+</p>
+<p style="text-align: center; margin-bottom: 1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">トレカの</span><span class="word-wrapper" style="white-space: pre-wrap;">プロ「</span><span class="word-wrapper" style="white-space: pre-wrap;">おがわ</span><span class="word-wrapper" style="white-space: pre-wrap;">監督」が</span><span class="word-wrapper" style="white-space: pre-wrap;">自ら</span><span class="word-wrapper" style="white-space: pre-wrap;">工場に</span><span class="word-wrapper" style="white-space: pre-wrap;">乗り込みを</span><span class="word-wrapper" style="white-space: pre-wrap;">かけて</span><span class="word-wrapper" style="white-space: pre-wrap;">生まれた</span></span></p>
+<p style="text-align: center; margin-bottom: 2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">妥協</span><span class="word-wrapper" style="white-space: pre-wrap;">なき</span><span class="word-wrapper" style="white-space: pre-wrap;">品質と</span><span class="word-wrapper" style="white-space: pre-wrap;">価格の「</span><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">印</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー」を</span><span class="word-wrapper" style="white-space: pre-wrap;">ぜひ</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">試し</span><span class="word-wrapper" style="white-space: pre-wrap;">ください！</span></span></p>
+<!-- CTA -->
+<div style="text-align: center;">
+<div style="width: 100%; height: 5rem; display: flex; align-items: center; justify-content: center;">
+<a class="cta-button" href="#order">
+<img alt="ピンクボタン背景" class="cta-bg" src="img/ボタン_白枠ピンク.png"/>
+<div class="cta-content" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+<img alt="注文忍者" class="cta-icon" src="img/ニンジャ_ダッシュ.png"/>
+<span class="cta-text"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">今</span><span class="word-wrapper" style="white-space: pre-wrap;">すぐ</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">する</span></span></span>
+<img alt="&gt;" src="img/矢印.png" style="width: 12px; height: 12px; flex-shrink: 0;"/>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- 右下の忍者オーバーレイ -->
+<div style="position: absolute; bottom: -20px; right: -1vw; z-index: 10;">
+<img alt="忍者" src="img/ニンジャ_巻物.png" style="width: 12vw; max-width: 120px; height: auto;"/>
+</div>
+</div>
+</section>
+<!-- ニンジャローダー6つの特徴セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_ネイビー.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span><span class="word-wrapper" style="white-space: pre-wrap;">6</span><span class="word-wrapper" style="white-space: pre-wrap;">つの</span><span class="word-wrapper" style="white-space: pre-wrap;">特徴</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- メイン画像 -->
+<div style="text-align: center; margin-bottom: 2rem;">
+<img alt="ハイクオリティなサイドローダー" src="img/ハイクオリティなサイドローダー.png" style="max-width: 100%; border-radius: 8px;"/>
+</div>
+<!-- 6つの特徴リスト -->
+<div style="background-color: #f5f5f5; padding: 2rem; border-radius: 10px; margin-bottom: 2rem;">
+<div style="margin-bottom: 1rem;">
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">上から</span><span class="word-wrapper" style="white-space: pre-wrap;">差し込む</span><span class="word-wrapper" style="white-space: pre-wrap;">タイプで</span><span class="word-wrapper" style="white-space: pre-wrap;">出し入れ</span><span class="word-wrapper" style="white-space: pre-wrap;">自由、</span><span class="word-wrapper" style="white-space: pre-wrap;">カードを</span><span class="word-wrapper" style="white-space: pre-wrap;">傷つけない</span><span class="word-wrapper" style="white-space: pre-wrap;">設計</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">端の</span><span class="word-wrapper" style="white-space: pre-wrap;">処理まで</span><span class="word-wrapper" style="white-space: pre-wrap;">完璧。</span><span class="word-wrapper" style="white-space: pre-wrap;">角の</span><span class="word-wrapper" style="white-space: pre-wrap;">クオリティが</span><span class="word-wrapper" style="white-space: pre-wrap;">違います</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">徹底</span><span class="word-wrapper" style="white-space: pre-wrap;">した</span><span class="word-wrapper" style="white-space: pre-wrap;">検品で</span><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品</span><span class="word-wrapper" style="white-space: pre-wrap;">率を</span><span class="word-wrapper" style="white-space: pre-wrap;">大幅に</span><span class="word-wrapper" style="white-space: pre-wrap;">削減</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">傷が</span><span class="word-wrapper" style="white-space: pre-wrap;">つき</span><span class="word-wrapper" style="white-space: pre-wrap;">にくい</span><span class="word-wrapper" style="white-space: pre-wrap;">PVC</span><span class="word-wrapper" style="white-space: pre-wrap;">素材</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">紫外</span><span class="word-wrapper" style="white-space: pre-wrap;">線を</span><span class="word-wrapper" style="white-space: pre-wrap;">カット</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">日焼けに</span><span class="word-wrapper" style="white-space: pre-wrap;">よる</span><span class="word-wrapper" style="white-space: pre-wrap;">色褪せを</span><span class="word-wrapper" style="white-space: pre-wrap;">防ぐ</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">トップ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーに</span><span class="word-wrapper" style="white-space: pre-wrap;">比べて、</span><span class="word-wrapper" style="white-space: pre-wrap;">サイド</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーは</span><span class="word-wrapper" style="white-space: pre-wrap;">スリーブ</span><span class="word-wrapper" style="white-space: pre-wrap;">ごと</span><span class="word-wrapper" style="white-space: pre-wrap;">スムーズに</span><span class="word-wrapper" style="white-space: pre-wrap;">収納</span><span class="word-wrapper" style="white-space: pre-wrap;">でき、</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">カードの</span><span class="word-wrapper" style="white-space: pre-wrap;">出し入れが</span><span class="word-wrapper" style="white-space: pre-wrap;">し</span><span class="word-wrapper" style="white-space: pre-wrap;">やすいです。</span><span class="word-wrapper" style="white-space: pre-wrap;">保管も</span><span class="word-wrapper" style="white-space: pre-wrap;">スマート。</span></span></span>
+</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ニンジャローダー製品紹介動画セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_緑.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span><span class="word-wrapper" style="white-space: pre-wrap;">製品</span><span class="word-wrapper" style="white-space: pre-wrap;">紹介</span><span class="word-wrapper" style="white-space: pre-wrap;">動画</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- 動画コンテンツ - YouTube埋め込み -->
+<div style="text-align: center; margin: 2rem auto;">
+<div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 56.25%; overflow: hidden; border-radius: 8px;">
+<!-- YouTube埋め込み -->
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/eBmseUfMU0g" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" title="ニンジャローダー製品紹介動画">
+</iframe>
+</div>
+<!-- 説明テキスト -->
+<p style="text-align: center; margin-top: 1.5rem; font-size: 1.2rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">商品の</span><span class="word-wrapper" style="white-space: pre-wrap;">詳細な</span><span class="word-wrapper" style="white-space: pre-wrap;">機能と</span><span class="word-wrapper" style="white-space: pre-wrap;">使い</span><span class="word-wrapper" style="white-space: pre-wrap;">方を</span><span class="word-wrapper" style="white-space: pre-wrap;">ご覧</span><span class="word-wrapper" style="white-space: pre-wrap;">ください</span></span></p>
+</div>
+</div>
+</section>
+<!-- ニンジャローダー価格表セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_ブルー.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">送料・</span><span class="word-wrapper" style="white-space: pre-wrap;">価格</span><span class="word-wrapper" style="white-space: pre-wrap;">一覧</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- サブ見出し -->
+<div style="text-align: center; margin-bottom: 1.5rem;">
+<h3 style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">シンプルで</span><span class="word-wrapper" style="white-space: pre-wrap;">わかり</span><span class="word-wrapper" style="white-space: pre-wrap;">やすい</span><span class="word-wrapper" style="white-space: pre-wrap;">価格・</span><span class="word-wrapper" style="white-space: pre-wrap;">送料</span><span class="word-wrapper" style="white-space: pre-wrap;">体系</span></span></h3>
+<h3 style="font-size: 1.3rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">大量</span><span class="word-wrapper" style="white-space: pre-wrap;">注文ほど</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">得に</span><span class="word-wrapper" style="white-space: pre-wrap;">なる</span><span class="word-wrapper" style="white-space: pre-wrap;">仕組みです</span></span></h3>
+</div>
+<!-- 送料表タイトル -->
+<div style="text-align: center; margin-bottom: 1.5rem;">
+<h2 style="font-size: 2rem; font-weight: bold; position: relative; display: inline-block;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">送料</span><span class="word-wrapper" style="white-space: pre-wrap;">表</span></span></h2>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+</div>
+<!-- 価格表 -->
+<div style="margin: 0 auto; max-width: 800px;">
+<div style="overflow-x: auto; background-color: #ffdd00; padding: 1rem 2rem;">
+<table style="width: 100%; border-collapse: collapse; ">
+<thead>
+<tr style="background-color: #ffdd00;">
+<th style="padding: 1rem; text-align: center; width: 50%; font-size: 1.3rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">数量</span></span></th>
+<th style="padding: 1rem; text-align: center; width: 50%; font-size: 1.3rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">単価（</span><span class="word-wrapper" style="white-space: pre-wrap;">税別）</span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr style="background-color: #fff;">
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">500枚</span></span></td>
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">24円</span></span></td>
+</tr>
+<tr style="background-color: #f5f5f5;">
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">1,000枚</span></span></td>
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">23円</span></span></td>
+</tr>
+<tr style="background-color: #fff;">
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">2,000枚</span></span></td>
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">22円</span></span></td>
+</tr>
+<tr style="background-color: #f5f5f5;">
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">5,000枚</span></span></td>
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">21円</span></span></td>
+</tr>
+<tr style="background-color: #fff;">
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">10,000枚以上</span></span></td>
+<td style="padding: 1rem; text-align: center; font-size: 1.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">19円</span></span></td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: right; font-size: 0.9rem; color: #666; margin-top: 0.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">※</span><span class="word-wrapper" style="white-space: pre-wrap;">沖縄・</span><span class="word-wrapper" style="white-space: pre-wrap;">離島は</span><span class="word-wrapper" style="white-space: pre-wrap;">別途</span><span class="word-wrapper" style="white-space: pre-wrap;">送料が</span><span class="word-wrapper" style="white-space: pre-wrap;">かかる</span><span class="word-wrapper" style="white-space: pre-wrap;">場合が</span><span class="word-wrapper" style="white-space: pre-wrap;">あります</span></span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- よくあるご質問セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_ネイビー.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">よく</span><span class="word-wrapper" style="white-space: pre-wrap;">ある</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">質問</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- FAQ コンテンツ -->
+<div style="margin: 2rem auto; max-width: 800px;">
+<!-- 質問1 -->
+<div style="border-bottom: 1px solid #ddd; margin-bottom: 1rem; padding-bottom: 1rem;">
+<div onclick="toggleAnswer(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+<div style="display: flex; align-items: center;">
+<div style="background-color: #ffdd00; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; margin-right: 1rem;">
+<span style="font-size: 1.8rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">Q</span></span></span>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">どの</span><span class="word-wrapper" style="white-space: pre-wrap;">ように</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">すれば</span><span class="word-wrapper" style="white-space: pre-wrap;">いいですか？</span></span></h3>
+</div>
+<div class="toggle-icon" style="font-size: 2rem; transition: transform 0.3s ease;">
+<svg fill="none" height="24" style="transform: rotate(180deg);" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 17L4 9L5.4 7.6L12 14.2L18.6 7.6L20 9L12 17Z" fill="#333333"></path>
+</svg>
+</div>
+</div>
+<div class="answer" style="margin-left: 70px; margin-top: 1rem; display: block;">
+<p style="margin-bottom: 1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">当</span><span class="word-wrapper" style="white-space: pre-wrap;">サイトの</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">フォーム、</span><span class="word-wrapper" style="white-space: pre-wrap;">または</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">電話からも</span><span class="word-wrapper" style="white-space: pre-wrap;">承って</span><span class="word-wrapper" style="white-space: pre-wrap;">おります。</span></span></p>
+<p style="margin-bottom: 1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">簡単</span><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">ステップで</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">いただけます。</span></span></p>
+<ol style="margin-left: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">フォームで</span><span class="word-wrapper" style="white-space: pre-wrap;">必要</span><span class="word-wrapper" style="white-space: pre-wrap;">枚数を</span><span class="word-wrapper" style="white-space: pre-wrap;">選択</span></span></li>
+<li style="margin-bottom: 0.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">必要</span><span class="word-wrapper" style="white-space: pre-wrap;">事項を</span><span class="word-wrapper" style="white-space: pre-wrap;">入力</span></span></li>
+<li style="margin-bottom: 0.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">入金</span><span class="word-wrapper" style="white-space: pre-wrap;">確認</span><span class="word-wrapper" style="white-space: pre-wrap;">後、</span><span class="word-wrapper" style="white-space: pre-wrap;">迅速に</span><span class="word-wrapper" style="white-space: pre-wrap;">発送</span></span></li>
+</ol>
+</div>
+</div>
+<!-- 質問2 -->
+<div style="border-bottom: 1px solid #ddd; margin-bottom: 1rem; padding-bottom: 1rem;">
+<div onclick="toggleAnswer(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+<div style="display: flex; align-items: center;">
+<div style="background-color: #ffdd00; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; margin-right: 1rem;">
+<span style="font-size: 1.8rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">Q</span></span></span>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">最低</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">数は</span><span class="word-wrapper" style="white-space: pre-wrap;">ありますか？</span></span></h3>
+</div>
+<div class="toggle-icon" style="font-size: 2rem; transition: transform 0.3s ease;">
+<svg fill="none" height="24" style="transform: rotate(0deg);" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 17L4 9L5.4 7.6L12 14.2L18.6 7.6L20 9L12 17Z" fill="#333333"></path>
+</svg>
+</div>
+</div>
+<div class="answer" style="margin-left: 70px; margin-top: 1rem; display: none;">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">最低</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">数は</span><span class="word-wrapper" style="white-space: pre-wrap;">500</span><span class="word-wrapper" style="white-space: pre-wrap;">枚からと</span><span class="word-wrapper" style="white-space: pre-wrap;">なって</span><span class="word-wrapper" style="white-space: pre-wrap;">おります。</span><span class="word-wrapper" style="white-space: pre-wrap;">価格</span><span class="word-wrapper" style="white-space: pre-wrap;">表に</span><span class="word-wrapper" style="white-space: pre-wrap;">記載の</span><span class="word-wrapper" style="white-space: pre-wrap;">通り、</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">数量が</span><span class="word-wrapper" style="white-space: pre-wrap;">増えるほど</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">得な</span><span class="word-wrapper" style="white-space: pre-wrap;">価格</span><span class="word-wrapper" style="white-space: pre-wrap;">設定と</span><span class="word-wrapper" style="white-space: pre-wrap;">なって</span><span class="word-wrapper" style="white-space: pre-wrap;">おりますので、</span><span class="word-wrapper" style="white-space: pre-wrap;">まとめての</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">注文を</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">すすめ</span><span class="word-wrapper" style="white-space: pre-wrap;">します。</span></span></p>
+</div>
+</div>
+<!-- 質問3 -->
+<div style="border-bottom: 1px solid #ddd; margin-bottom: 1rem; padding-bottom: 1rem;">
+<div onclick="toggleAnswer(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+<div style="display: flex; align-items: center;">
+<div style="background-color: #ffdd00; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; margin-right: 1rem;">
+<span style="font-size: 1.8rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">Q</span></span></span>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">納期は</span><span class="word-wrapper" style="white-space: pre-wrap;">どれくらい</span><span class="word-wrapper" style="white-space: pre-wrap;">かかりますか？</span></span></h3>
+</div>
+<div class="toggle-icon" style="font-size: 2rem; transition: transform 0.3s ease;">
+<svg fill="none" height="24" style="transform: rotate(0deg);" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 17L4 9L5.4 7.6L12 14.2L18.6 7.6L20 9L12 17Z" fill="#333333"></path>
+</svg>
+</div>
+</div>
+<div class="answer" style="margin-left: 70px; margin-top: 1rem; display: none;">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">都内</span><span class="word-wrapper" style="white-space: pre-wrap;">近郊で</span><span class="word-wrapper" style="white-space: pre-wrap;">あれば</span><span class="word-wrapper" style="white-space: pre-wrap;">最短</span><span class="word-wrapper" style="white-space: pre-wrap;">当日での</span><span class="word-wrapper" style="white-space: pre-wrap;">配送が</span><span class="word-wrapper" style="white-space: pre-wrap;">可能です。</span><span class="word-wrapper" style="white-space: pre-wrap;">その</span><span class="word-wrapper" style="white-space: pre-wrap;">他の</span><span class="word-wrapper" style="white-space: pre-wrap;">地域は</span><span class="word-wrapper" style="white-space: pre-wrap;">通常</span><span class="word-wrapper" style="white-space: pre-wrap;">1</span><span class="word-wrapper" style="white-space: pre-wrap;">〜</span><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">営業</span><span class="word-wrapper" style="white-space: pre-wrap;">日</span><span class="word-wrapper" style="white-space: pre-wrap;">以内に</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">届け</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">おります。</span><span class="word-wrapper" style="white-space: pre-wrap;">大量</span><span class="word-wrapper" style="white-space: pre-wrap;">注文や</span><span class="word-wrapper" style="white-space: pre-wrap;">繁忙</span><span class="word-wrapper" style="white-space: pre-wrap;">期は</span><span class="word-wrapper" style="white-space: pre-wrap;">若干</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">時間を</span><span class="word-wrapper" style="white-space: pre-wrap;">いただく</span><span class="word-wrapper" style="white-space: pre-wrap;">場合が</span><span class="word-wrapper" style="white-space: pre-wrap;">ございますので、</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">急ぎの</span><span class="word-wrapper" style="white-space: pre-wrap;">場合は</span><span class="word-wrapper" style="white-space: pre-wrap;">事前に</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">相談</span><span class="word-wrapper" style="white-space: pre-wrap;">ください。</span></span></p>
+</div>
+</div>
+<!-- 質問4 -->
+<div style="border-bottom: 1px solid #ddd; margin-bottom: 1rem; padding-bottom: 1rem;">
+<div onclick="toggleAnswer(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+<div style="display: flex; align-items: center;">
+<div style="background-color: #ffdd00; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; margin-right: 1rem;">
+<span style="font-size: 1.8rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">Q</span></span></span>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: bold;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品が</span><span class="word-wrapper" style="white-space: pre-wrap;">届いた</span><span class="word-wrapper" style="white-space: pre-wrap;">場合の</span><span class="word-wrapper" style="white-space: pre-wrap;">対応は？</span></span></h3>
+</div>
+<div class="toggle-icon" style="font-size: 2rem; transition: transform 0.3s ease;">
+<svg fill="none" height="24" style="transform: rotate(0deg);" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 17L4 9L5.4 7.6L12 14.2L18.6 7.6L20 9L12 17Z" fill="#333333"></path>
+</svg>
+</div>
+</div>
+<div class="answer" style="margin-left: 70px; margin-top: 1rem; display: none;">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">万が一</span><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品が</span><span class="word-wrapper" style="white-space: pre-wrap;">届いた</span><span class="word-wrapper" style="white-space: pre-wrap;">場合は、</span><span class="word-wrapper" style="white-space: pre-wrap;">商品</span><span class="word-wrapper" style="white-space: pre-wrap;">到着</span><span class="word-wrapper" style="white-space: pre-wrap;">後</span><span class="word-wrapper" style="white-space: pre-wrap;">7</span><span class="word-wrapper" style="white-space: pre-wrap;">日</span><span class="word-wrapper" style="white-space: pre-wrap;">以内に</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">連絡</span><span class="word-wrapper" style="white-space: pre-wrap;">ください。</span><span class="word-wrapper" style="white-space: pre-wrap;">写真を</span><span class="word-wrapper" style="white-space: pre-wrap;">添えて</span><span class="word-wrapper" style="white-space: pre-wrap;">メールで</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">報告</span><span class="word-wrapper" style="white-space: pre-wrap;">いただければ、</span><span class="word-wrapper" style="white-space: pre-wrap;">迅速に</span><span class="word-wrapper" style="white-space: pre-wrap;">代替</span><span class="word-wrapper" style="white-space: pre-wrap;">品を</span><span class="word-wrapper" style="white-space: pre-wrap;">発送</span><span class="word-wrapper" style="white-space: pre-wrap;">いたします。</span><span class="word-wrapper" style="white-space: pre-wrap;">当社では</span><span class="word-wrapper" style="white-space: pre-wrap;">3</span><span class="word-wrapper" style="white-space: pre-wrap;">回の</span><span class="word-wrapper" style="white-space: pre-wrap;">厳格な</span><span class="word-wrapper" style="white-space: pre-wrap;">検品を</span><span class="word-wrapper" style="white-space: pre-wrap;">実施</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">おりますが、</span><span class="word-wrapper" style="white-space: pre-wrap;">万一の</span><span class="word-wrapper" style="white-space: pre-wrap;">際にも</span><span class="word-wrapper" style="white-space: pre-wrap;">安心</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">利用</span><span class="word-wrapper" style="white-space: pre-wrap;">いただける</span><span class="word-wrapper" style="white-space: pre-wrap;">よう</span><span class="word-wrapper" style="white-space: pre-wrap;">対応</span><span class="word-wrapper" style="white-space: pre-wrap;">いたします。</span></span></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQの開閉用JavaScript -->
+<script>
+            function toggleAnswer(element) {
+                const answer = element.nextElementSibling;
+                const icon = element.querySelector('.toggle-icon svg');
+                
+                if (answer.style.display === 'none' || answer.style.display === '') {
+                    answer.style.display = 'block';
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    answer.style.display = 'none';
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        </script>
+<!-- 返品・不良品対応セクション -->
+<section class="ninja-info-section">
+<div class="scroll-container">
+<!-- 見出し部分 -->
+<div class="ninja-title-container">
+<img alt="巻物背景" class="scroll-bg" src="img/巻物_緑.png"/>
+<h2 class="ninja-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">返品・</span><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品</span><span class="word-wrapper" style="white-space: pre-wrap;">対応に</span><span class="word-wrapper" style="white-space: pre-wrap;">ついて</span></span></h2>
+<img alt="ローダー_透過3連" class="loader-overlay" src="img/ローダー_透過3連.png"/>
+</div>
+<!-- サブ見出し -->
+<div class="ninja-subtitle-container">
+<h3 class="ninja-subtitle"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">安心の</span><span class="word-wrapper" style="white-space: pre-wrap;">品質</span><span class="word-wrapper" style="white-space: pre-wrap;">保証</span></span></h3>
+<div class="divider">
+<div class="diamond-left"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+<hr class="line"/>
+<div class="diamond-right"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">◆</span></span></div>
+</div>
+</div>
+<!-- 紹介文 -->
+<div class="ninja-description">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダーは</span><span class="word-wrapper" style="white-space: pre-wrap;">徹底</span><span class="word-wrapper" style="white-space: pre-wrap;">した</span><span class="word-wrapper" style="white-space: pre-wrap;">品質</span><span class="word-wrapper" style="white-space: pre-wrap;">管理の</span><span class="word-wrapper" style="white-space: pre-wrap;">もと</span><span class="word-wrapper" style="white-space: pre-wrap;">製造</span><span class="word-wrapper" style="white-space: pre-wrap;">されて</span><span class="word-wrapper" style="white-space: pre-wrap;">いますが、</span><span class="word-wrapper" style="white-space: pre-wrap;">万が一</span><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品が</span><span class="word-wrapper" style="white-space: pre-wrap;">届いた</span><span class="word-wrapper" style="white-space: pre-wrap;">場合には、</span><span class="word-wrapper" style="white-space: pre-wrap;">次回の</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">時に</span><span class="word-wrapper" style="white-space: pre-wrap;">同様の</span><span class="word-wrapper" style="white-space: pre-wrap;">量を</span><span class="word-wrapper" style="white-space: pre-wrap;">無料で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">送りさせて</span><span class="word-wrapper" style="white-space: pre-wrap;">いただきます。</span></span></p>
+<p><span class="highlight"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">購入から</span><span class="word-wrapper" style="white-space: pre-wrap;">2</span><span class="word-wrapper" style="white-space: pre-wrap;">日</span><span class="word-wrapper" style="white-space: pre-wrap;">以内に</span><span class="word-wrapper" style="white-space: pre-wrap;">メールにて</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">連絡</span><span class="word-wrapper" style="white-space: pre-wrap;">ください</span></span></span></p>
+</div>
+<!-- 不良品対応ポリシー -->
+<div style="background-color: #f5f5f5; padding: 2rem; border-radius: 10px; margin: 2rem 0;">
+<div style="margin-bottom: 1.5rem;">
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品の</span><span class="word-wrapper" style="white-space: pre-wrap;">写真を</span><span class="word-wrapper" style="white-space: pre-wrap;">メールで</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">送り</span><span class="word-wrapper" style="white-space: pre-wrap;">ください</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">次回</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">時に</span><span class="word-wrapper" style="white-space: pre-wrap;">同等</span><span class="word-wrapper" style="white-space: pre-wrap;">量を</span><span class="word-wrapper" style="white-space: pre-wrap;">追加</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">届け</span><span class="word-wrapper" style="white-space: pre-wrap;">します</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">不良</span><span class="word-wrapper" style="white-space: pre-wrap;">品の</span><span class="word-wrapper" style="white-space: pre-wrap;">返送は</span><span class="word-wrapper" style="white-space: pre-wrap;">不要です</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">商品</span><span class="word-wrapper" style="white-space: pre-wrap;">到着</span><span class="word-wrapper" style="white-space: pre-wrap;">後</span><span class="word-wrapper" style="white-space: pre-wrap;">2</span><span class="word-wrapper" style="white-space: pre-wrap;">日</span><span class="word-wrapper" style="white-space: pre-wrap;">以内に</span><span class="word-wrapper" style="white-space: pre-wrap;">ご</span><span class="word-wrapper" style="white-space: pre-wrap;">連絡</span><span class="word-wrapper" style="white-space: pre-wrap;">ください</span></span></span>
+</p>
+<p style="display: flex; align-items: center; margin-bottom: 1rem;">
+<img alt="手裏剣" src="img/手裏剣_単体.png" style="width: 24px; height: 24px; margin-right: 1rem;"/>
+<span style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">客</span><span class="word-wrapper" style="white-space: pre-wrap;">様</span><span class="word-wrapper" style="white-space: pre-wrap;">都合に</span><span class="word-wrapper" style="white-space: pre-wrap;">よる</span><span class="word-wrapper" style="white-space: pre-wrap;">返品・</span><span class="word-wrapper" style="white-space: pre-wrap;">交換は</span><span class="word-wrapper" style="white-space: pre-wrap;">原則</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">受け</span><span class="word-wrapper" style="white-space: pre-wrap;">して</span><span class="word-wrapper" style="white-space: pre-wrap;">おりません</span></span></span>
+</p>
+</div>
+</div>
+<!-- ショップ様向けサポート -->
+<div style="background-color: #ffdd00; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; text-align: center;">
+<h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ショップ</span><span class="word-wrapper" style="white-space: pre-wrap;">様</span><span class="word-wrapper" style="white-space: pre-wrap;">向け</span><span class="word-wrapper" style="white-space: pre-wrap;">安心</span><span class="word-wrapper" style="white-space: pre-wrap;">サポート</span></span></h3>
+<p style="font-size: 1.1rem; margin-bottom: 1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">トレカ</span><span class="word-wrapper" style="white-space: pre-wrap;">ショップ</span><span class="word-wrapper" style="white-space: pre-wrap;">様の</span><span class="word-wrapper" style="white-space: pre-wrap;">業務</span><span class="word-wrapper" style="white-space: pre-wrap;">効率</span><span class="word-wrapper" style="white-space: pre-wrap;">化を</span><span class="word-wrapper" style="white-space: pre-wrap;">考え、</span><span class="word-wrapper" style="white-space: pre-wrap;">面倒な</span><span class="word-wrapper" style="white-space: pre-wrap;">返送</span><span class="word-wrapper" style="white-space: pre-wrap;">手続きは</span><span class="word-wrapper" style="white-space: pre-wrap;">不要。</span></span></p>
+<p style="font-size: 1.1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">写真</span><span class="word-wrapper" style="white-space: pre-wrap;">1</span><span class="word-wrapper" style="white-space: pre-wrap;">枚で</span><span class="word-wrapper" style="white-space: pre-wrap;">簡単に</span><span class="word-wrapper" style="white-space: pre-wrap;">対応</span><span class="word-wrapper" style="white-space: pre-wrap;">いたします。</span></span></p>
+</div>
+</div>
+</section>
+<!-- CTA最終セクション -->
+<section class="cta-final" style="padding: 2rem 1rem; text-align: center;">
+<div class="container" style="max-width: 1200px; margin: 0 auto;">
+<div style="padding: 1rem; border-radius: 15px; position: relative;">
+<div class="features-title-wrapper">
+<img alt="手裏剣" class="shuriken-img shuriken-img-left" src="img/手裏剣_三連.png"/>
+<div class="features-title"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンニンローダーポチって</span><span class="word-wrapper" style="white-space: pre-wrap;">みる？</span></span></div>
+<img alt="手裏剣" class="shuriken-img shuriken-img-right" src="img/手裏剣_三連.png"/>
+</div>
+<!-- Mobile 向け特徴セクション -->
+<div class="responsive-features-content" style="display: none; height:9rem;">
+<img alt="手裏剣" class="shuriken-img" src="img/手裏剣_三連.png" style="width: 12rem; left: calc(50% - 6rem); top: 0;"/>
+<div class="responsive-title" style="margin-top:1rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ニンニンローダー</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">ポチって</span><span class="word-wrapper" style="white-space: pre-wrap;">みる？</span></span></div>
+</div>
+<div style="margin: 2rem auto; max-width: 800px;">
+<p style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center;"><span data-rwb-processed="true">
+<span class="word-wrapper" style="white-space: pre-wrap;">電話対応時間：10:00〜19:00</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">Web</span><span class="word-wrapper" style="white-space: pre-wrap;">対応：</span><span class="word-wrapper" style="white-space: pre-wrap;">24</span><span class="word-wrapper" style="white-space: pre-wrap;">時間</span><span class="word-wrapper" style="white-space: pre-wrap;">受付</span><span class="word-wrapper" style="white-space: pre-wrap;">中</span></span></p>
+<!-- CTA -->
+<div class="cta-container">
+<a class="cta-button" href="#order">
+<img alt="ピンクボタン背景" class="cta-bg" src="img/ボタン_白枠ピンク.png"/>
+<div class="cta-content">
+<img alt="注文忍者" class="cta-icon" src="img/ニンジャ_ダッシュ.png"/>
+<span class="cta-text"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">今</span><span class="word-wrapper" style="white-space: pre-wrap;">すぐ</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">する</span></span></span>
+<img alt="&gt;" src="img/矢印.png" style="width: 12px; height: 12px; flex-shrink: 0;"/>
+</div>
+</a>
+<a class="cta-button" href="#contact">
+<img alt="ブルーボタン背景" class="cta-bg" src="img/ボタン_白枠シアン.png"/>
+<div class="cta-content">
+<img alt="電話忍者" class="cta-icon" src="img/ニンジャ_電話.png"/>
+<span class="cta-text"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">電話で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">問い合わせ</span></span></span>
+<img alt="&gt;" src="img/矢印.png" style="width: 12px; height: 12px; flex-shrink: 0;"/>
+</div>
+</a>
+</div>
+<!-- オレンジバナー -->
+<div class="orange-banner-outer" id="sticky-banner">
+<div class="orange-banner">
+<div class="banner-text">
+<p><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">トレカの</span><span class="word-wrapper" style="white-space: pre-wrap;">プロが</span><span class="word-wrapper" style="white-space: pre-wrap;">作った</span></span><br/><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">最高</span><span class="word-wrapper" style="white-space: pre-wrap;">品質</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー、</span><span class="word-wrapper" style="white-space: pre-wrap;">1</span><span class="word-wrapper" style="white-space: pre-wrap;">枚</span><span class="word-wrapper" style="white-space: pre-wrap;">19</span><span class="word-wrapper" style="white-space: pre-wrap;">円〜</span></span></p>
+</div>
+<div class="banner-buttons">
+<a class="banner-button pink-button" href="#order"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">今</span><span class="word-wrapper" style="white-space: pre-wrap;">すぐ</span><span class="word-wrapper" style="white-space: pre-wrap;">注文</span><span class="word-wrapper" style="white-space: pre-wrap;">する</span></span><span style="display: inline-block; margin-left: 0.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">▶</span></span></span>
+</a>
+<a class="banner-button blue-button" href="#contact"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">電話で</span><span class="word-wrapper" style="white-space: pre-wrap;">お</span><span class="word-wrapper" style="white-space: pre-wrap;">問い合わせ</span></span><span style="display: inline-block; margin-left: 0.2rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">▶</span></span></span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- フッター -->
+<footer style="background-color: #333; color: white; text-align: center; padding: 1.5rem 1rem;">
+<p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><span data-rwb-processed="true"><span class="word-wrapper" style="white-space: pre-wrap;">2025</span><span class="word-wrapper" style="white-space: pre-wrap;">ニンジャ</span><span class="word-wrapper" style="white-space: pre-wrap;">印の</span><span class="word-wrapper" style="white-space: pre-wrap;">ローダー</span><span class="word-wrapper" style="white-space: pre-wrap;">屋</span><span class="word-wrapper" style="white-space: pre-wrap;">さん|</span><span class="word-wrapper" style="white-space: pre-wrap;">株式</span><span class="word-wrapper" style="white-space: pre-wrap;">会社</span><span class="word-wrapper" style="white-space: pre-wrap;">ninja</span></span></p>
+</footer>
+</div>
+</body>
+</html>
